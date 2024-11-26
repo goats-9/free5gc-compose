@@ -144,7 +144,7 @@ services:
       - "8000"
     volumes:
       - ./config/smfcfg1.yaml:/free5gc/config/smfcfg.yaml
-      - ./config/uerouting2.yaml:/free5gc/config/uerouting.yaml
+      - ./config/uerouting1.yaml:/free5gc/config/uerouting.yaml
       - ./cert:/free5gc/cert
     environment:
       GIN_MODE: release

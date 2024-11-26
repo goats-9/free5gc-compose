@@ -46,7 +46,7 @@ configuration:
     upNodes: # information of userplane node (AN or UPF)
       gNB1: # the name of the node
         type: AN # the type of the node (AN or UPF)
-      UPF: # the name of the node
+      UPF-1: # the name of the node
         type: UPF # the type of the node (AN or UPF)
         nodeID: upf-1.free5gc.org # the Node ID of this UPF
         addr: upf-1.free5gc.org # the IP/FQDN of N4 interface on this UPF (PFCP)
@@ -77,7 +77,7 @@ configuration:
               - internet
     links: # the topology graph of userplane, A and B represent the two nodes of each link
       - A: gNB1
-        B: UPF
+        B: UPF-1
   # retransmission timer for pdu session modification command
   t3591:
     enable: true # true or false
