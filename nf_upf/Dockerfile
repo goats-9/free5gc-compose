@@ -5,7 +5,7 @@ RUN git clone https://github.com/free5gc/go-gtp5gnl.git && mkdir "go-gtp5gnl/bin
     cd -
 
 FROM free5gc/upf-base:latest AS builder
-FROM bitnami/minideb:bullseye
+FROM bitnami/minideb:bookworm
 
 LABEL description="free5GC open source 5G Core Network" \
     version="Stage 3"
@@ -19,12 +19,15 @@ RUN if [ "$DEBUG_TOOLS" = "true" ] ; then apt-get update && apt-get install -y v
 
 # Install UPF dependencies
 RUN apt-get update \
-    && apt-get install -y libmnl0 libyaml-0-2 iproute2 iptables \
+    && apt-get install -y libmnl0 libyaml-0-2 iproute2 iptables tshark tcpdump libffi-dev procps python3-full \
     && apt-get clean
 
 # Set working dir
 WORKDIR /free5gc
 RUN mkdir -p config/ log/
+
+RUN python3 -m venv venv \
+    && venv/bin/pip install nfstream scapy pandas
 
 # Copy executable
 COPY --from=builder /free5gc/${F5GC_MODULE} ./

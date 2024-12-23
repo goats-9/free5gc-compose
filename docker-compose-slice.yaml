@@ -3,7 +3,12 @@ version: "3.8"
 services:
   free5gc-upf-1:
     container_name: upf-1
-    image: free5gc/upf:v3.4.3
+    build:
+      context: ./nf_upf
+      dockerfile: Dockerfile
+      args:
+        - DEBUG_TOOLS=false
+    # image: free5gc/upf:v3.4.3
     command: bash -c "./upf-iptables.sh && ./upf -c ./config/upfcfg.yaml"
     volumes:
       - ./config/upfcfg1.yaml:/free5gc/config/upfcfg.yaml
@@ -17,10 +22,13 @@ services:
 
   free5gc-upf-2:
     container_name: upf-2
-    image: free5gc/upf:v3.4.3
+    build:
+      context: ./nf_upf
+      dockerfile: Dockerfile
+      args:
+        - DEBUG_TOOLS=false
+    # image: free5gc/upf:v3.4.3
     command: bash -c "./upf-iptables.sh && ./upf -c ./config/upfcfg.yaml"
-    expose:
-       - "8000"  # Map TCP port 8080
     volumes:
       - ./config/upfcfg2.yaml:/free5gc/config/upfcfg.yaml
       - ./config/upf-iptables.sh:/free5gc/upf-iptables.sh
@@ -324,7 +332,7 @@ services:
     build:
       context: ueransim
       dockerfile: Dockerfile
-#   image: free5gc/ueransim:latest
+    # image: free5gc/ueransim:latest
     command: ./nr-gnb -c ./config/gnbcfg.yaml
     volumes:
       - ./config/gnbcfg.yaml:/ueransim/config/gnbcfg.yaml
@@ -340,6 +348,8 @@ services:
           - gnb.free5gc.org
     depends_on:
       - free5gc-amf
+      - free5gc-smf-1
+      - free5gc-smf-2
       - free5gc-upf-1
       - free5gc-upf-2
 
