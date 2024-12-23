@@ -45,7 +45,7 @@ sessions:
 #     sst: 0x01
 #     sd: 0x010203
   - type: "IPv4"
-    apn: "internet-2"
+    apn: "internet"
     slice:
       sst: 0x01
       sd: 0x112233
