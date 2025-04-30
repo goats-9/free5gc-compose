@@ -1,0 +1,36 @@
+services:
+  free5gc-upf-6:
+    container_name: upf-6
+    # image: free5gc/upf:v4.0.0
+    build: nf_upf
+    command: bash -c "./upf-iptables.sh && ./upf -c ./config/upfcfg.yaml"
+    volumes:
+      - ./config/upfcfg-6.yaml:/free5gc/config/upfcfg.yaml
+      - ./config/upf-iptables.sh:/free5gc/upf-iptables.sh
+      - ./generators/flow:/free5gc/flow
+    cap_add:
+      - NET_ADMIN
+    networks:
+      privnet:
+        aliases:
+          - upf-6.free5gc.org
+
+  free5gc-smf-6:
+    container_name: smf-6
+    image: free5gc/smf:v4.0.0
+    command: ./smf -c ./config/smfcfg.yaml -u ./config/uerouting.yaml
+    expose:
+      - "8000"
+    volumes:
+      - ./config/smfcfg-6.yaml:/free5gc/config/smfcfg.yaml
+      - ./config/uerouting-6.yaml:/free5gc/config/uerouting.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      privnet:
+        aliases:
+          - smf-6.free5gc.org
+    depends_on:
+      - free5gc-nrf
+      - free5gc-upf-6

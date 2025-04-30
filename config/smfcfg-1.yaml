@@ -6,8 +6,8 @@ configuration:
   smfName: SMF # the name of this SMF
   sbi: # Service-based interface information
     scheme: http # the protocol for sbi (http or https)
-    registerIPv4: smf-2.free5gc.org # IP used to register to NRF
-    bindingIPv4: smf-2.free5gc.org # IP used to bind the service
+    registerIPv4: smf-1.free5gc.org # IP used to register to NRF
+    bindingIPv4: smf-1.free5gc.org # IP used to bind the service
     port: 8000 # Port used to bind the service
     tls: # the local path of TLS key
       key: cert/smf.key # SMF TLS Certificate
@@ -17,17 +17,9 @@ configuration:
     - nsmf-event-exposure # Nsmf_EventExposure service
     - nsmf-oam # OAM service
   snssaiInfos: # the S-NSSAI (Single Network Slice Selection Assistance Information) list supported by this AMF
-#   - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
-#       sst: 1 # Slice/Service Type (uinteger, range: 0~255)
-#       sd: 010203 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
-#     dnnInfos: # DNN information list
-#       - dnn: internet # Data Network Name
-#         dns: # the IP address of DNS
-#           ipv4: 8.8.8.8
-#           ipv6: 2001:4860:4860::8888
     - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
         sst: 1 # Slice/Service Type (uinteger, range: 0~255)
-        sd: 112233 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+        sd: 000001 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
       dnnInfos: # DNN information list
         - dnn: internet # Data Network Name
           dns: # the IP address of DNS
@@ -39,45 +31,36 @@ configuration:
   locality: area1 # Name of the location where a set of AMF, SMF, PCF and UPFs are located
   pfcp: # the IP address of N4 interface on this SMF (PFCP)
     # addr config is deprecated in smf config v1.0.3, please use the following config
-    nodeID: smf-2.free5gc.org # the Node ID of this SMF
-    listenAddr: smf-2.free5gc.org # the IP/FQDN of N4 interface on this SMF (PFCP)
-    externalAddr: smf-2.free5gc.org # the IP/FQDN of N4 interface on this SMF (PFCP)
+    nodeID: smf-1.free5gc.org # the Node ID of this SMF
+    listenAddr: smf-1.free5gc.org # the IP/FQDN of N4 interface on this SMF (PFCP)
+    externalAddr: smf-1.free5gc.org # the IP/FQDN of N4 interface on this SMF (PFCP)
   userplaneInformation: # list of userplane information
     upNodes: # information of userplane node (AN or UPF)
-      gNB1: # the name of the node
+      gNB: # the name of the node
         type: AN # the type of the node (AN or UPF)
-      UPF-2: # the name of the node
+      UPF-1: # the name of the node
         type: UPF # the type of the node (AN or UPF)
-        nodeID: upf-2.free5gc.org # the Node ID of this UPF
-        addr: upf-2.free5gc.org # the IP/FQDN of N4 interface on this UPF (PFCP)
+        nodeID: upf-1.free5gc.org # the Node ID of this UPF
+        addr: upf-1.free5gc.org # the IP/FQDN of N4 interface on this UPF (PFCP)
         sNssaiUpfInfos: # S-NSSAI information list for this UPF
-#         - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
-#             sst: 1 # Slice/Service Type (uinteger, range: 0~255)
-#             sd: 010203 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
-#           dnnUpfInfoList: # DNN information list for this S-NSSAI
-#             - dnn: internet
-#               pools:
-#                 - cidr: 10.60.0.0/16
-#               staticPools:
-#                 - cidr: 10.60.100.0/24
           - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
               sst: 1 # Slice/Service Type (uinteger, range: 0~255)
-              sd: 112233 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+              sd: 000001 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
             dnnUpfInfoList: # DNN information list for this S-NSSAI
               - dnn: internet
                 pools:
-                  - cidr: 10.61.0.0/16
+                  - cidr: 10.60.0.0/16
                 staticPools:
-                  - cidr: 10.61.100.0/24
+                  - cidr: 10.60.100.0/24
         interfaces: # Interface list for this UPF
           - interfaceType: N3 # the type of the interface (N3 or N9)
             endpoints: # the IP address of this N3/N9 interface on this UPF
-              - upf-2.free5gc.org
+              - upf-1.free5gc.org
             networkInstances: # Data Network Name (DNN)
               - internet
     links: # the topology graph of userplane, A and B represent the two nodes of each link
-      - A: gNB1
-        B: UPF-2
+      - A: gNB
+        B: UPF-1
   # retransmission timer for pdu session modification command
   t3591:
     enable: true # true or false

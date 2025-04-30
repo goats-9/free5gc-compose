@@ -1,5 +1,5 @@
 # IMSI number of the UE. IMSI = [MCC|MNC|MSISDN] (In total 15 digits)
-supi: "imsi-208930000000501"
+supi: "imsi-208931000000301"
 # Mobile Country Code value of HPLMN
 mcc: "208"
 # Mobile Network Code value of HPLMN (2 or 3 digits)
@@ -39,23 +39,16 @@ uacAcc:
 
 # Initial PDU sessions to be established
 sessions:
-# - type: "IPv4"
-#   apn: "internet"
-#   slice:
-#     sst: 0x01
-#     sd: 0x010203
   - type: "IPv4"
     apn: "internet"
     slice:
       sst: 0x01
-      sd: 0x112233
-
+      sd: 0x000004
+  
 # Configured NSSAI for this UE by HPLMN
 configured-nssai:
-# - sst: 0x01
-#   sd: 0x010203
   - sst: 0x01
-    sd: 0x112233
+    sd: 0x000004
 
 # Default Configured NSSAI for this UE
 default-nssai:
