@@ -1,3 +1,5 @@
+# Imports
+
 from multiprocessing import Pool
 import subprocess
 import os
@@ -16,25 +18,6 @@ import socket
 import argparse
 
 random.seed(42)
-
-# attack_types = {
-#     "est": session_establishment_request,
-#     # "mod_drop": session_modification_drop_request,
-#     # "mod_dupl": session_modification_dupl_request,
-#     "del": session_deletion_request, 
-# }
-
-# parser = argparse.ArgumentParser()
-# parser.add_argument('--attack', default='est', choices=attack_types.keys(), help='Type of PFCP flood attack to execute')
-# args = parser.parse_args()
-
-# req_create_fn = attack_types[args.attack]
-
-# N = random.randint(1, MAX_DDOS)
-# for i in range(N):
-#     # Send the packet
-#     send(req_create_fn(random.randint(1, MAX_SEID)))
-# random.seed(0)
 
 # Constants
 

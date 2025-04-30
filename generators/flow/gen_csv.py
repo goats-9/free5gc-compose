@@ -1,7 +1,6 @@
-from nfstream import NFPlugin, NFStreamer
+from nfstream import NFStreamer, NFPlugin
 from scapy.layers.inet import IP, UDP
 from scapy.contrib.pfcp import PFCP, PFCPmessageType
-import pandas as pd
 import sys
 
 IFACE='eth0'
