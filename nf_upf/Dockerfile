@@ -27,7 +27,7 @@ WORKDIR /free5gc
 RUN mkdir -p config/ log/
 
 RUN python3 -m venv venv \
-    && venv/bin/pip install nfstream scapy pandas
+    && venv/bin/pip install nfstream scapy pandas requests
 
 # Copy executable
 COPY --from=builder /free5gc/${F5GC_MODULE} ./

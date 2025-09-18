@@ -3,8 +3,6 @@ from multiprocessing import Pool
 import psutil
 import argparse
 from itertools import repeat
-import random
-import time
 
 from utils import *
 from constants import *

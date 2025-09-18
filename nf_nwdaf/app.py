@@ -91,7 +91,7 @@ class OnlineDeepSVDD:
             mode='min', 
             factor=0.5, 
             patience=5,
-            verbose=True
+            # verbose=True
         )
         
         # Improved parameters
@@ -553,9 +553,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=\linewidth]{slice-1-f1-comp.pdf}
-    \caption{Cross-slice federated learning vs Single-Slice}
-    \label{fig:results3}
-\end{figure}

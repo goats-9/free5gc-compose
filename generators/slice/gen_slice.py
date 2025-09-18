@@ -7,14 +7,14 @@ import ruamel.yaml.scalarint
 
 # Constants
 ROOT_PATH = str(Path(__file__).parents[2].absolute())
+VERSION = "v4.0.1"
 
-IP_OFFSET = 60
+IP_OFFSET = 70
 IMSI_OFFSET = 208931000000001
-
-CORE_TEMPLATE="""services:
+CORE_TEMPLATE=f"""services:
   free5gc-upf:
     container_name: upf
-    # image: free5gc/upf:v4.0.0
+    # image: free5gc/upf:{VERSION}
     build: nf_upf
     command: bash -c "./upf-iptables.sh && ./upf -c ./config/upfcfg.yaml"
     volumes:
@@ -43,7 +43,7 @@ CORE_TEMPLATE="""services:
 
   free5gc-nrf:
     container_name: nrf
-    image: free5gc/nrf:v4.0.0
+    image: free5gc/nrf:{VERSION}
     command: ./nrf -c ./config/nrfcfg.yaml
     expose:
       - "8000"
@@ -62,7 +62,7 @@ CORE_TEMPLATE="""services:
 
   free5gc-amf:
     container_name: amf
-    image: free5gc/amf:v4.0.0
+    image: free5gc/amf:{VERSION}
     command: ./amf -c ./config/amfcfg.yaml
     expose:
       - "8000"
@@ -73,7 +73,7 @@ CORE_TEMPLATE="""services:
       GIN_MODE: release
     networks:
       privnet:
-        ipv4_address: 10.100.200.16
+        ipv4_address: 10.100.200.216
         aliases:
           - amf.free5gc.org
     depends_on:
@@ -81,7 +81,7 @@ CORE_TEMPLATE="""services:
 
   free5gc-ausf:
     container_name: ausf
-    image: free5gc/ausf:v4.0.0
+    image: free5gc/ausf:{VERSION}
     command: ./ausf -c ./config/ausfcfg.yaml
     expose:
       - "8000"
@@ -99,7 +99,7 @@ CORE_TEMPLATE="""services:
 
   free5gc-nssf:
     container_name: nssf
-    image: free5gc/nssf:v4.0.0
+    image: free5gc/nssf:{VERSION}
     command: ./nssf -c ./config/nssfcfg.yaml
     expose:
       - "8000"
@@ -117,7 +117,7 @@ CORE_TEMPLATE="""services:
 
   free5gc-pcf:
     container_name: pcf
-    image: free5gc/pcf:v4.0.0
+    image: free5gc/pcf:{VERSION}
     command: ./pcf -c ./config/pcfcfg.yaml
     expose:
       - "8000"
@@ -135,7 +135,7 @@ CORE_TEMPLATE="""services:
 
   free5gc-smf:
     container_name: smf
-    image: free5gc/smf:v4.0.0
+    image: free5gc/smf:{VERSION}
     command: ./smf -c ./config/smfcfg.yaml -u ./config/uerouting.yaml
     expose:
       - "8000"
@@ -155,7 +155,7 @@ CORE_TEMPLATE="""services:
 
   free5gc-udm:
     container_name: udm
-    image: free5gc/udm:v4.0.0
+    image: free5gc/udm:{VERSION}
     command: ./udm -c ./config/udmcfg.yaml
     expose:
       - "8000"
@@ -174,7 +174,7 @@ CORE_TEMPLATE="""services:
 
   free5gc-udr:
     container_name: udr
-    image: free5gc/udr:v4.0.0
+    image: free5gc/udr:{VERSION}
     command: ./udr -c ./config/udrcfg.yaml
     expose:
       - "8000"
@@ -194,7 +194,7 @@ CORE_TEMPLATE="""services:
 
   free5gc-chf:
     container_name: chf
-    image: free5gc/chf:v4.0.0
+    image: free5gc/chf:{VERSION}
     command: ./chf -c ./config/chfcfg.yaml
     expose:
       - "8000"
@@ -212,44 +212,6 @@ CORE_TEMPLATE="""services:
       - db
       - free5gc-nrf
       - free5gc-webui
-
-  free5gc-n3iwf:
-    container_name: n3iwf
-    image: free5gc/n3iwf:v4.0.0
-    command: ./n3iwf -c ./config/n3iwfcfg.yaml
-    volumes:
-      - ./config/n3iwfcfg.yaml:/free5gc/config/n3iwfcfg.yaml
-      - ./config/n3iwf-ipsec.sh:/free5gc/n3iwf-ipsec.sh
-    environment:
-      GIN_MODE: release
-    cap_add:
-      - NET_ADMIN
-    networks:
-      privnet:
-        ipv4_address: 10.100.200.15
-        aliases:
-          - n3iwf.free5gc.org
-    depends_on:
-      - free5gc-amf
-      - free5gc-smf
-      - free5gc-upf
-
-  free5gc-tngf:
-    container_name: tngf
-    image: free5gc/tngf:latest
-    command: ./tngf -c ./config/tngfcfg.yaml
-    volumes:
-      - ./config/tngfcfg.yaml:/free5gc/config/tngfcfg.yaml
-      - ./cert:/free5gc/cert
-    environment:
-      GIN_MODE: release
-    cap_add:
-      - NET_ADMIN
-    network_mode: host
-    depends_on:
-      - free5gc-amf
-      - free5gc-smf
-      - free5gc-upf
 
   free5gc-nef:
     container_name: nef
@@ -272,7 +234,7 @@ CORE_TEMPLATE="""services:
 
   free5gc-webui:
     container_name: webui
-    image: free5gc/webui:v4.0.0
+    image: free5gc/webui:{VERSION}
     command: ./webui -c ./config/webuicfg.yaml
     expose:
       - "2121"
@@ -292,11 +254,22 @@ CORE_TEMPLATE="""services:
       - db
       - free5gc-nrf
 
+  nwdaf-0:
+    container_name: nwdaf-0
+    build: nf_nwdaf
+    command: python3 app.py --server
+    expose:
+      - 5000
+    networks:
+      privnet:
+        aliases:
+          - nwdaf-0.free5gc.org
+
   ueransim:
     container_name: ueransim
     build:
       context: ueransim
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.slice
     # image: free5gc/ueransim:latest
     command: ./nr-gnb -c ./config/gnbcfg.yaml
     # UE configurations to be added here
@@ -314,24 +287,6 @@ CORE_TEMPLATE="""services:
     depends_on:
       - free5gc-amf
       - free5gc-upf
-
-  n3iwue:
-    container_name: n3iwue
-    image: free5gc/n3iwue:latest
-    command: bash -c "ip route del default && ip route add default via 10.100.200.1 dev eth0 metric 203 && sleep infinity"
-    volumes:
-      - ./config/n3uecfg.yaml:/n3iwue/config/n3ue.yaml
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - "/dev/net/tun"
-    networks:
-      privnet:
-        ipv4_address: 10.100.200.203
-        aliases:
-          - n3ue.free5gc.org
-    depends_on:
-      - free5gc-n3iwf
 
   target:
     build: target
@@ -364,7 +319,7 @@ volumes:
 SLICE_TEMPLATE="""services:
   free5gc-upf-{i}:
     container_name: upf-{i}
-    # image: free5gc/upf:v4.0.0
+    # image: free5gc/upf:{VERSION}
     build: nf_upf
     command: bash -c "./upf-iptables.sh && ./upf -c ./config/upfcfg.yaml"
     volumes:
@@ -380,7 +335,7 @@ SLICE_TEMPLATE="""services:
 
   free5gc-smf-{i}:
     container_name: smf-{i}
-    image: free5gc/smf:v4.0.0
+    image: free5gc/smf:{VERSION}
     command: ./smf -c ./config/smfcfg.yaml -u ./config/uerouting.yaml
     expose:
       - "8000"
@@ -397,6 +352,17 @@ SLICE_TEMPLATE="""services:
     depends_on:
       - free5gc-nrf
       - free5gc-upf-{i}
+
+  nwdaf-{i}:
+    container_name: nwdaf-{i}
+    build: nf_nwdaf
+    command: python3 app.py --client
+    expose:
+      - 5000
+    networks:
+      privnet:
+        aliases:
+          - nwdaf-{i}.free5gc.org
 """
 
 AMFCFG_TEMPLATE = """
@@ -801,7 +767,7 @@ def gen_compose(i: int) -> None:
     """
     with open(f'{ROOT_PATH}/docker-compose-slice-{i}.yaml', 'w') as f:
         # Generate docker-compose file
-        f.write(SLICE_TEMPLATE.format(i=i))
+        f.write(SLICE_TEMPLATE.format(i=i, VERSION=VERSION))
 
 def gen_amf(n: int) -> None:
     """

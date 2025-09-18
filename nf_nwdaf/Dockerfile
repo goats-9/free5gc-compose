@@ -1,24 +1,31 @@
 # Dockerfile
 FROM python:3.9-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-WORKDIR /app
-
-# System deps
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
     build-essential \
+    libpcap-dev \
+    net-tools \
+    iputils-ping \
+    iproute2 \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir --upgrade pip
+# Set working directory
+WORKDIR /app
 
-# Copy requirements first for better caching
+# Copy requirements first to leverage Docker cache
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy main code
-COPY app.py /app/
+# Copy the rest of the application
+COPY . .
 
-CMD ["python3", "app.py", "--help"]
+# Make sure the script is executable
+RUN chmod +x realtime_fl_detector.py
+
+# Create directory for flow data
+RUN mkdir -p /app/flow_data
+
+# Default command (will be overridden by docker-compose)
+CMD ["python3", "realtime_fl_detector.py", "--iface", "br-free5gc", "--slice_id", "1"]
