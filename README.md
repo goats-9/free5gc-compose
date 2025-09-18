@@ -71,6 +71,39 @@ docker compose -f docker-compose-build.yaml rm
 docker compose rm
 ```
 
+## Run Slice Based free5GC Core
+
+Generate docker compose files for `X` slices by running
+
+```bash
+python3 generators/slice/gen_slice.py -n X
+```
+
+Then, start the containers
+
+```bash
+docker-compose -f docker-compose-core.yaml -f docker-compose-slice-1.yaml ... -f docker.compose-slice-X.yaml up -d
+```
+
+Open a shell in the `ueransim` container and start the UEs. The following command will run `Y` UEs subscribed to slice `i`. Make sure enough UEs are provisioned for the corresponding slice in the WebUI. 
+
+```bash
+docker exec -it ueransim bash
+./nr-ue -c config/uecfg-i.yaml -n Y
+```
+
+To generate traffic of a certain type, issue the following command in the `ueransim` container.
+
+```bash
+venv/bin/python3 traffic/main.py -m TYPE
+```
+
+Finally, to collect data locally at the UPF, run the following in the `upf-i` container.
+
+```bash
+venv/bin/python3 flow/gen_flow.py -m local -f FILE.csv
+```
+
 ## Troubleshooting
 
 Please refer to the [Troubleshooting](./TROUBLESHOOTING.md) for more troubleshooting information.
