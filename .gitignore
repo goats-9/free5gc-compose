@@ -9,3 +9,5 @@ cert/*_*.pem
 
 # FTP files
 ftp/
+
+__pycache__
